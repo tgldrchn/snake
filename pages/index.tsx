@@ -3,7 +3,7 @@ import useInterval from "use-interval";
 
 const areaWidth = 20;
 const areaHeight = 20;
-const zoom = 19;
+const zoom = 20;
 const snakeWidth = 1;
 const snakeHeight = 1;
 
@@ -11,19 +11,18 @@ export default function Home() {
   const [snake, setSnake] = useState([
     { top: 1, left: 1 },
     { top: 1, left: 2 },
-    { top: 1, left: 3 },
-    { top: 1, left: 4 },
-    { top: 1, left: 5 },
   ]);
 
   const [direction, setDirection] = useState("right");
 
-  const [foodHeight, setFoodHeight] = useState(
-    Math.floor(Math.random() * 19) + 1
-  );
-  const [foodWidth, setFoodWidth] = useState(
-    Math.floor(Math.random() * 19) + 1
-  );
+  const [foodHeight, setFoodHeight] = useState(Number);
+  const [foodWidth, setFoodWidth] = useState(Number);
+
+  useEffect(() => {
+    setFoodHeight(Math.floor(Math.random() * 19) + 1);
+    setFoodWidth(Math.floor(Math.random() * 19) + 1);
+  }, []);
+
   const [score, setScore] = useState(0);
   useEffect(() => {
     window.addEventListener("keydown", (e) => {
@@ -47,20 +46,35 @@ export default function Home() {
     switch (direction) {
       case "right":
         goRight();
+        end();
         break;
       case "left":
         goLeft();
+        end();
         break;
       case "down":
         goDown();
+        end();
         break;
       case "up":
         goUp();
+        end();
         break;
-      default:
-        goRight();
     }
-  }, 190);
+  }, 100);
+
+  const end = () => {
+    const deleteSnake = [...snake];
+    deleteSnake.shift();
+    if (
+      deleteSnake.find(
+        (e) => e.top === snake[0].top && e.left === snake[0].left
+      )
+    ) {
+      alert("game over");
+      location.reload();
+    }
+  };
 
   const goRight = () => {
     let newSnake = [...snake];
@@ -133,6 +147,7 @@ export default function Home() {
     }
     setSnake(newSnake);
   };
+
   return (
     <div
       style={{
@@ -143,28 +158,18 @@ export default function Home() {
         width: "100vw",
       }}
     >
-      <div
-        style={{
-          width: areaWidth * zoom,
-          height: areaHeight * zoom,
-          backgroundColor: "yellow",
-        }}
-      >
-        <div style={{ position: "relative" }}>
-          <div
-            style={{
-              width: snakeWidth * zoom,
-              height: snakeHeight * zoom,
-              position: "absolute",
-              left: foodWidth * zoom,
-              top: foodHeight * zoom,
-              backgroundColor: "red",
-              borderRadius: 50,
-            }}
-          ></div>
+      <div style={{ position: "relative" }}>
+        <div
+          style={{
+            width: areaWidth * zoom,
+            height: areaHeight * zoom,
+            backgroundColor: "yellow",
+          }}
+        >
           {snake &&
-            snake.map((position) => (
+            snake.map((position, i) => (
               <div
+                key={i}
                 style={{
                   width: snakeWidth * zoom,
                   height: snakeHeight * zoom,
@@ -177,6 +182,18 @@ export default function Home() {
               ></div>
             ))}
         </div>
+
+        <div
+          style={{
+            width: snakeWidth * zoom,
+            height: snakeHeight * zoom,
+            position: "absolute",
+            left: foodWidth * zoom,
+            top: foodHeight * zoom,
+            backgroundColor: "red",
+            borderRadius: 50,
+          }}
+        ></div>
       </div>
       <div>score :{score}</div>
     </div>
