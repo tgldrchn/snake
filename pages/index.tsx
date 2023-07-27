@@ -33,16 +33,19 @@ export default function Home() {
 
   useEffect(() => {
     window.addEventListener("keydown", (e) => {
-      if (e.code == "ArrowRight" && direction != "left") {
-        setDirection("right");
-      } else if (e.code == "ArrowDown" && direction != "up") {
-        setDirection("down");
-      } else if (e.code == "ArrowUp" && direction != "down") {
-        setDirection("up");
-      } else if (e.code == "ArrowLeft" && direction != "right") {
-        setDirection("left");
-      } else {
-        setDirection("");
+      switch (e.code) {
+        case "ArrowRight":
+          setDirection("right");
+          break;
+        case "ArrowLeft":
+          setDirection("left");
+          break;
+        case "ArrowDown":
+          setDirection("down");
+          break;
+        case "ArrowUp":
+          setDirection("up");
+          break;
       }
 
       // switch (e.code) {
@@ -127,8 +130,7 @@ export default function Home() {
         (e) => e.top === snake[0].top && e.left === snake[0].left
       )
     ) {
-      location.reload();
-      alert("game over");
+      window.location.reload();
       highScore();
     }
   };
@@ -293,7 +295,7 @@ export default function Home() {
         <MenuItem value={"medium"}>Medium</MenuItem>
         <MenuItem value={"hard"}>Hard</MenuItem>
       </Select>
-      <div style={{ position: "relative", border: "10px solid green" }}>
+      <div style={{ position: "relative", border: `${zoom}px solid green` }}>
         <div
           style={{
             width: areaWidth * zoom,
@@ -312,7 +314,10 @@ export default function Home() {
                     position: "absolute",
                     top: position.top * zoom,
                     left: position.left * zoom,
-                    backgroundColor: "green",
+                    backgroundImage: `url(${"https://www.creativefabrica.com/wp-content/uploads/2022/04/12/Cute-Snake-Head-Illustration-Graphics-28859855-3-580x387.jpg"})`,
+                    backgroundSize: snakeWidth * zoom * 2.1,
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
                     borderRadius: 50,
                   }}
                 ></div>
@@ -340,7 +345,10 @@ export default function Home() {
             position: "absolute",
             left: foodWidth * zoom,
             top: foodHeight * zoom,
-            backgroundColor: "red",
+            backgroundImage: `url(${"https://static.vecteezy.com/system/resources/previews/016/637/861/original/red-apple-icon-png.png"})`,
+            backgroundSize: snakeWidth * zoom * 1.5,
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
             borderRadius: 50,
           }}
         ></div>
