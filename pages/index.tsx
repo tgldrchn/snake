@@ -16,7 +16,6 @@ export default function Home() {
   ]);
 
   const [direction, setDirection] = useState("right");
-
   const [foodHeight, setFoodHeight] = useState(Number);
   const [foodWidth, setFoodWidth] = useState(Number);
   const [score, setScore] = useState(0);
@@ -33,21 +32,45 @@ export default function Home() {
 
   useEffect(() => {
     window.addEventListener("keydown", (e) => {
-      switch (e.code) {
-        case "ArrowRight":
-          setDirection("right");
-          break;
-        case "ArrowLeft":
-          setDirection("left");
-          break;
-        case "ArrowDown":
-          setDirection("down");
-          break;
-        case "ArrowUp":
-          setDirection("up");
-          break;
-      }
-
+      setDirection((prevDirection) => {
+        switch (e.code) {
+          case "ArrowRight":
+            if (prevDirection !== "left") {
+              return "right";
+            }
+            break;
+          case "ArrowLeft":
+            if (prevDirection !== "right") {
+              return "left";
+            }
+            break;
+          case "ArrowDown":
+            if (prevDirection !== "up") {
+              return "down";
+            }
+            break;
+          case "ArrowUp":
+            if (prevDirection !== "down") {
+              return "up";
+            }
+            break;
+        }
+        return prevDirection;
+      });
+      // switch (e.code) {
+      //   case "ArrowRight":
+      //     setDirection("right");
+      //     break;
+      //   case "ArrowLeft":
+      //     setDirection("left");
+      //     break;
+      //   case "ArrowDown":
+      //     setDirection("down");
+      //     break;
+      //   case "ArrowUp":
+      //     setDirection("up");
+      //     break;
+      // }
       // switch (e.code) {
       //   case "ArrowRight":
       //     direction !== "left" ? setDirection("right") : setDirection("left");
